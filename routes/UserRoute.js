@@ -26,7 +26,9 @@ user_route.post('/login', user_controller.user_Login)
 user_route.get('/test', auth, function (req, res) {
     res.status(200).send({ status: true, msg: "Authenticated" })
 })
-user_route.post('/updatePassword', user_controller.update_Password)
+user_route.post('/updatePassword:id', auth, user_controller.update_Password)
+user_route.post('/forgetPassword', auth, user_controller.forget_Password)
+
 
 
 module.exports = user_route

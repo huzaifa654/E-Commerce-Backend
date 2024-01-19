@@ -2,6 +2,8 @@ const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const config = require("../config/Config")
 const jwt = require("jsonwebtoken")
+const nodemailer = require("nodemailer")
+const randomString = require("randomstring")
 const CreateToken = async (id) => {
     try {
         const token = await jwt.sign({ _id: id }, config.secret_jwt)
@@ -94,11 +96,47 @@ const user_Login = async (req, res) => {
     }
 }
 
-const update_Password=async(req,res)=>{
- 
+const update_Password = async (req, res) => {
+    try {
+        const user_id = req.body.user_id
+        const password = req.body.password
+        const data = await User.findOne({ _id: user_id })
+        if (data) {
+            const newPassword = await securePassword(password);
+            const userData = User.findByIdAndUpdate({ _id: user_id, }, {
+                $set: {
+                    password: newPassword
+                }
+            })
+            const user_data = await userData.save();
+            console.log(user_data)
+            res.status(200).send({ success: true, msg: "Your Password has been updated successfully" })
+        } else {
+            res.status(400).send({ success: false, msg: "User Id not found!" })
+        }
+
+    } catch (error) {
+        res.status(400).send(error?.message)
+    }
+}
+
+const forget_Password = async (req, res) => {
+    try {
+        const userData = await User.findOne({ email: req.body.email })
+        if (userData) {
+
+        } else {
+            res.status(400).send({ success: false, msg: "email not found!" })
+
+        }
+    } catch (error) {
+        res.status(400).send(error?.message)
+
+    }
 }
 module.exports = {
     register_user,
     user_Login,
-    update_Password
+    update_Password,
+    forget_Password
 };

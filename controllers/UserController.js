@@ -98,27 +98,29 @@ const user_Login = async (req, res) => {
 
 const update_Password = async (req, res) => {
     try {
-        const user_id = req.body.user_id
-        const password = req.body.password
-        const data = await User.findOne({ _id: user_id })
+        const user_id = req.body.user_id;
+        const password = req.body.password;
+        const data = await User.findOne({ _id: user_id });
+
         if (data) {
             const newPassword = await securePassword(password);
-            const userData = User.findByIdAndUpdate({ _id: user_id, }, {
-                $set: {
-                    password: newPassword
-                }
-            })
-            const user_data = await userData.save();
-            console.log(user_data)
-            res.status(200).send({ success: true, msg: "Your Password has been updated successfully" })
+            const userData = await User.findByIdAndUpdate(
+                { _id: user_id },
+                { $set: { password: newPassword } },
+                { new: true } // This option returns the updated document
+            );
+
+            console.log(userData);
+            res.status(200).send({ success: true, msg: "Your Password has been updated successfully", data: userData });
         } else {
-            res.status(400).send({ success: false, msg: "User Id not found!" })
+            res.status(400).send({ success: false, msg: "User Id not found!" });
         }
 
     } catch (error) {
-        res.status(400).send(error?.message)
+        res.status(400).send(error?.message);
     }
-}
+};
+
 
 const forget_Password = async (req, res) => {
     try {

@@ -8,12 +8,19 @@ const path = require("path");
 store_route.use(express.static('public'))
 const auth = require("../middleware/auth")
 store_route.use(express.static('public'))
+const store_controller = require("../controllers/StoreController")
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, '../public/StoreImages'));
     },
     filename: function (req, file, cb) {
         const name = Date.now() + '-' + file.originalname;
-        cb(null, name);
+        cb(null, name, function (error, success) {
+            if (error) {
+                throw error
+            }
+        });
     }
 });
+const upload = multer({ storage: storage });
+store_route.post("/craete-store", auth, upload.single('logo'))  

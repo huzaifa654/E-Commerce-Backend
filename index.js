@@ -6,7 +6,13 @@ mongoose.connect("mongodb://127.0.0.1:27017/Ecom")
     .catch((e) => console.log("No Connection", e))
 
 const user_route = require("./routes/UserRoute")
+const store_route = require("./routes/StoreRoute")
+const category_route = require("./routes/CategoryRoute")
 app.use('/api', user_route)
+app.use('/api', store_route)
+app.use('/api', category_route)
+
+
 // app.get("/hello", (req, res) => {
 //     res.send("Hello =000")
 // })

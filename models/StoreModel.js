@@ -22,7 +22,7 @@ const StoreSchema = mongoose.Schema({
     },
     location: {
         type: { type: String, required: true },
-        cordinates: []
+        coordinates: []
     },
 })
 StoreSchema.index({ location: "2dsphere" })

@@ -7,7 +7,6 @@ const multer = require("multer");
 const path = require("path");
 store_route.use(express.static('public'))
 const auth = require("../middleware/auth")
-store_route.use(express.static('public'))
 const store_controller = require("../controllers/StoreController")
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -23,4 +22,6 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-store_route.post("/craete-store", auth, upload.single('logo'))  
+store_route.post("/craete-store", auth, upload.single('logo'), store_controller.createStore)
+
+module.exports = store_route

@@ -209,13 +209,14 @@ const renew_token = async (id) => {
         const newSecretJwt = randomstring.generate();
         fs.readFile('config/Config.js', 'utf-8', function (err, data) {
             if (err) throw err
-            const newValue = data.replace(new RegExp(secret_jwt, "g"), newSecretJwt)
+            var newValue = data.replace(new RegExp(secret_jwt, "g"), newSecretJwt)
             fs.writeFile('config/Config.js', newValue, 'utf-8', function (err, data) {
                 if (err) throw err;
                 console.log("Done!")
             })
         })
-        const token = await jwt.sign({ _id: id }, config.secret_jwt);
+        const token = await jwt.sign({ _id: id }, newSecretJwt);
+        console.log("token----------", token)
         return token
     } catch (error) {
         console.log("renew_token------", error)
@@ -230,13 +231,15 @@ const refresh_token = async (req, res) => {
     try {
         const userData = await User.findById({ _id: user_id });
         if (!userData) {
-            return res.status(200).send({ success: false, msg: "User not found" });
+            res.status(200).send({ success: false, msg: "User not found" });
         }
         const tokenData = await renew_token(user_id);
+        console.log("tokenData-----", tokenData)
         const response = {
             user_id: user_id,
             token: tokenData
         };
+        console.log("response123-----------", response)
         res.status(200).send({ success: true, msg: "Refresh token details", data: response });
     } catch (error) {
         console.log("error-----", error);

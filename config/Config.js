@@ -1,5 +1,5 @@
 const config = {
-    secret_jwt: "okk55FTwsxiBy7YE6DeKLdgQzFCsTrz7",
+    secret_jwt: "Z4FRm8s4ko4gJxgcAORDOBeakFfcKbHz",
     emailUser: "utest1830@gmail.com",
     emailPassword: "clcp fusa sibq ldby"
 }

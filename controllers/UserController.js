@@ -154,7 +154,6 @@ const update_Password = async (req, res) => {
     }
 };
 
-
 const forget_Password = async (req, res) => {
     try {
         const email = req.body.email
@@ -177,6 +176,7 @@ const forget_Password = async (req, res) => {
 
     }
 }
+
 const reset_Password = async (req, res) => {
     try {
         const token = req.query.token
@@ -201,10 +201,48 @@ const reset_Password = async (req, res) => {
         res.status(400).send({ success: false, msg: error?.message })
     }
 }
+
+const renew_token = async (id) => {
+    try {
+        const jwt_token = config.secret_jwt
+        randomstring.generate();
+        const token = await jwt.sign({ _id: id }, config.secret_jwt);
+        return token
+    } catch (error) {
+        res.status(400).send({ success: false, msg: error.message })
+
+    }
+}
+
+const refresh_token = async (req, res) => {
+    try {
+        const user_id = req.body.user_id;
+        const userData = await User.findById({ _id: user_id });
+        if (userData) {
+            const tokenData = await renew_token(user_id);
+            const response = {
+                user_id: user_id,
+                token: tokenData
+            }
+            res.status(200).send({ success: true, msg: "Refresh token details", data: response })
+        } else {
+            res.status(200).send({ success: false, msg: "User not found" })
+
+        }
+
+    } catch (error) {
+        res.status(400).send({ success: false, msg: error.message })
+    }
+
+}
+
+
+
 module.exports = {
     register_user,
     user_Login,
     update_Password,
     forget_Password,
-    reset_Password
+    reset_Password,
+    refresh_token
 };

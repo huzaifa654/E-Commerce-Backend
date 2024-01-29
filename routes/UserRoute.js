@@ -29,6 +29,7 @@ user_route.get('/test', auth, function (req, res) {
 user_route.post('/updatePassword', auth, user_controller.update_Password)
 user_route.post('/forgetPassword', user_controller.forget_Password)
 user_route.post('/resetPassword', user_controller.reset_Password)
+user_route.post('/refreshToken', auth, user_controller.refresh_token)
 
 
 

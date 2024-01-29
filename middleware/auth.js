@@ -9,7 +9,7 @@ const verifyToken = async (req, res, next) => {
         const descode = jwt.verify(token, config.secret_jwt);
         req.user = descode;
     } catch (error) {
-        res.status(400).send("Invalid Token")
+        res.status(400).send({ success: false, msg: "Invalid Token" })
 
     }
     return next();

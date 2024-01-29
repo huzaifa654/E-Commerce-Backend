@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const config = require("../config/Config")
 const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
+const fs = require("fs")
 const randomstring = require("randomstring");
 
 const sendResetPasswordMail = async (name, email, token) => {
@@ -204,37 +205,47 @@ const reset_Password = async (req, res) => {
 
 const renew_token = async (id) => {
     try {
-        const jwt_token = config.secret_jwt
-        randomstring.generate();
+        const secret_jwt = config.secret_jwt
+        const newSecretJwt = randomstring.generate();
+        fs.readFile('config/Config.js', 'utf-8', function (err, data) {
+            if (err) throw err
+            const newValue = data.replace(new RegExp(secret_jwt, "g"), newSecretJwt)
+            fs.writeFile('config/Config.js', newValue, 'utf-8', function (err, data) {
+                if (err) throw err;
+                console.log("Done!")
+            })
+        })
         const token = await jwt.sign({ _id: id }, config.secret_jwt);
         return token
     } catch (error) {
-        res.status(400).send({ success: false, msg: error.message })
-
+        console.log("renew_token------", error)
+        // throw error; // Re-throw the error to be handled by the caller
     }
 }
+
+
 
 const refresh_token = async (req, res) => {
+    const user_id = req.body.user_id;
     try {
-        const user_id = req.body.user_id;
         const userData = await User.findById({ _id: user_id });
-        if (userData) {
-            const tokenData = await renew_token(user_id);
-            const response = {
-                user_id: user_id,
-                token: tokenData
-            }
-            res.status(200).send({ success: true, msg: "Refresh token details", data: response })
-        } else {
-            res.status(200).send({ success: false, msg: "User not found" })
-
+        if (!userData) {
+            return res.status(200).send({ success: false, msg: "User not found" });
         }
-
+        const tokenData = await renew_token(user_id);
+        const response = {
+            user_id: user_id,
+            token: tokenData
+        };
+        res.status(200).send({ success: true, msg: "Refresh token details", data: response });
     } catch (error) {
-        res.status(400).send({ success: false, msg: error.message })
+        console.log("error-----", error);
+        // throw error
+        // res.status(400).send({ success: false, msg: error.message });
     }
+};
 
-}
+
 
 
 

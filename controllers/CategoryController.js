@@ -10,7 +10,7 @@ const Add_Category = async (req, res) => {
             const categoryData = await new Category({
                 category: category.toLowerCase()
             });
-
+   
             const catData = await categoryData.save()
             res.status(200).send({ success: true, msg: "Category Data", data: catData })
         }

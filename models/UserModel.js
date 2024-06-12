@@ -1,6 +1,30 @@
 const mongoose = require("mongoose");
 const User = mongoose.Schema({
-    name: {
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
+        type: String,
+        required: true
+    },
+    seatNo: {
+        type: String,
+        required: true
+    },
+    semester: {
+        type: String,
+        required: true
+    },
+    semesterGPA: {
+        type: String,
+        required: true
+    },
+    overAllGPA: {
+        type: String,
+        required: true
+    },
+    skilledCourses: {
         type: String,
         required: true
     },
@@ -8,25 +32,12 @@ const User = mongoose.Schema({
         type: String,
         required: true
     },
+
     password: {
         type: String,
         required: true
     },
-    image: {
-        type: String,
-        required: true
-    },
-    mobile: {
-        type: Number,
-        required: true
-    },
-    type: {
-        type: String,
-        required: true,
-    },
-    token: {
-        type: String,
-        default: ''
-    }
+   
+
 });
-module.exports = mongoose.model("User", User)
+module.exports = mongoose.model("Student", User)

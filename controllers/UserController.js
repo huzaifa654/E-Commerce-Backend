@@ -63,7 +63,7 @@ const register_user = async (req, res) => {
 
 
         if (userEmail || userSeatNo) {
-            res.status(200).send({ success: false, msg: `With this ${userEmail ? "email" : "Seat No"} user is already exists` });
+            res.status(200).send({ success: false, message: `With this ${userEmail ? "email" : "Seat No"} user is already exists` });
         } else {
             // Save the new user instance to the database
             const user_data = await newUser.save();
@@ -104,17 +104,6 @@ const user_Login = async (req, res) => {
         console.log("error------------", error)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

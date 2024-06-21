@@ -6,8 +6,12 @@ mongoose.connect("mongodb://127.0.0.1:27017/Students")
     .catch((e) => console.log("No Connection", e))
 
 const user_route = require("./routes/UserRoute")
+const semester_route = require("./routes/SemesterRoute")
+
 
 app.use('/api', user_route)
+app.use('/api', semester_route)
+
 
 
 

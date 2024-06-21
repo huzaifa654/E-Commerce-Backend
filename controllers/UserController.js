@@ -1,42 +1,6 @@
 const User = require("../models/UserModel");
-const config = require("../config/Config")
-const jwt = require("jsonwebtoken")
-const nodemailer = require("nodemailer")
-const fs = require("fs")
-const randomstring = require("randomstring");
 
-const sendResetPasswordMail = async (name, email, token) => {
-    try {
-        const Transport = nodemailer.createTransport({
 
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: config?.emailUser,
-                pass: config?.emailPassword
-            }
-        })
-        const mailOptions = {
-            from: config?.emailUser,
-            to: email,
-            subject: 'For Reset Password',
-            html: '<p> Hey ' + name + ', Please copy the link and <a href="http://localhost:3000/api/resetPassword?token=' + token + '">resest your password </a>'
-
-        }
-        Transport.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error)
-            } else {
-                console.log("Mial has been sent", info.response)
-            }
-        })
-
-    } catch (error) {
-        res.status(400).send({ success: false, msg: error?.message })
-    }
-}
 
 
 const register_user = async (req, res) => {
@@ -84,7 +48,7 @@ const user_Login = async (req, res) => {
         const UserResponse = await User.find({ email: email });
 
         if (UserEmail && UserPassword) {
-            res.status(200).send(UserResponse)
+            res.status(200).send({ success: true, UserResponse })
         } else if (!UserEmail) {
             res.status(200).send({ success: false, msg: "Email is incorrect" })
 

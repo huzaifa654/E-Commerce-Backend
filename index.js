@@ -8,11 +8,14 @@ mongoose.connect("mongodb://127.0.0.1:27017/Students")
 const user_route = require("./routes/UserRoute")
 const semester_route = require("./routes/SemesterRoute")
 const report_route = require("./routes/ReportRoute")
+const timetable_route = require("./routes/TimeTableRoute")
 
 
 app.use('/api', user_route)
 app.use('/api', semester_route)
 app.use('/api', report_route)
+app.use('/api', timetable_route)
+
 
 
 

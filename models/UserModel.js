@@ -12,21 +12,26 @@ const User = mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
-        type: String,
-        required: true
-    },
     mobile: {
         type: Number,
         required: true
     },
-    type: {
+    role: {
         type: String,
-        required: true,
+        required: true
+    },
+    department: {
+        type: String,
+        required: true
+    },
+    user_status:{
+        type:String,
+        default:'Inactive'
     },
     token: {
         type: String,
         default: ''
     }
 });
+
 module.exports = mongoose.model("User", User)

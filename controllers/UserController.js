@@ -57,18 +57,18 @@ const securePassword = async (password) => {
 
 const register_user = async (req, res) => {
     try {
-        const spassword = await securePassword(req.body.password);
+        const { name, email, password, mobile, role, department } = req.body
+        const spassword = await securePassword(password);
 
         const newUser = new User({
-            name: req.body.name,
-            email: req.body.email,
+            name: name,
+            email: email,
             password: spassword,
-            image: req.file.filename,
-            mobile: req.body.mobile,
-            type: req.body.type,
+            mobile: mobile,
+            role: role,
+            department: department,
         });
 
-        console.log("req.file.type-------", req.file.type);
 
         const userData = await User.findOne({ email: req.body.email });
 
@@ -86,6 +86,13 @@ const register_user = async (req, res) => {
         res.status(400).send(error.message);
     }
 };
+
+const get_users = async (req, res) => {
+    const allusers = await User.find()  //Give all in all users
+    const roleBasedUser=await User.find({role:"HOD"})
+    const departmentBasedUser=await User.find({department:"Sales"})
+    res.status(200).send({ success: true, data: allusers });
+}
 
 const user_Login = async (req, res) => {
     try {
@@ -253,9 +260,11 @@ const refresh_token = async (req, res) => {
 
 module.exports = {
     register_user,
+    get_users,
     user_Login,
     update_Password,
     forget_Password,
     reset_Password,
-    refresh_token
+    refresh_token,
+    
 };

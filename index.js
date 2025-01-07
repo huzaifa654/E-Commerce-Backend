@@ -1,26 +1,21 @@
 const express = require("express")
 const app = express()
 const mongoose = require('mongoose')
-mongoose.connect("mongodb://127.0.0.1:27017/Ecom")
+mongoose.connect("mongodb://127.0.0.1:27017/HRM")
     .then(() => console.log("Connection Eastablish Successfully"))
     .catch((e) => console.log("No Connection", e))
 
 const user_route = require("./routes/UserRoute")
-const store_route = require("./routes/StoreRoute")
-const category_route = require("./routes/CategoryRoute")
-const subcategory_route = require("./routes/SubCategoryRoute")
-const product_route = require("./routes/ProductRoute")
+const clint_route = require("./routes/ClientRoute")
+
+
 app.use('/api', user_route)
-app.use('/api', store_route)
-app.use('/api', category_route)
-app.use('/api', subcategory_route)
-app.use('/api', product_route)
+app.use('/api', clint_route)
 
 
 
-// app.get("/hello", (req, res) => {
-//     res.send("Hello =000")
-// })
+
+
 
 app.listen(3000, function () {
     console.log("Server is ready")
